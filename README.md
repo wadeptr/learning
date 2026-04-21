@@ -3,7 +3,21 @@ A collection of miscellaneous learning materials and notes, mostly on technical 
 
 ## Prerequisites
 
-1. Install Rust
+1. Install Dependencies / C linker
+```zsh
+# Debian/Ubuntu
+sudo apt install build-essential
+```
+```zsh
+# Fedora/RHEL
+sudo dnf install gcc
+```
+```zsh
+# MacOS
+xcode-select --install
+```
+
+2. Install Rust
 ```zsh
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 ```
@@ -11,7 +25,7 @@ Follow the default installation prompts and then reload your shell
 ```zsh
 source $HOME/.cargo/env
 ```
-2. Clone and build
+3. Clone and build
 ```zsh
 git clone https://github.com/wadeptr/learning.git
 ```
