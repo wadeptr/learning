@@ -1,6 +1,7 @@
 # Learning
-A collection of miscellaneous learning materials and notes, mostly on technical topics for the software engineer. Topics are loosely separated by directories in the root of the project. The presence of an `exercises.toml` file within a topic directory means the information is quizzable - the project cli can be run to perform the exercises for practice. 
+A collection of miscellaneous learning materials and notes, mostly on technical topics for the software engineer. Topics are loosely separated by directories in project root. The presence of an `exercises.toml` file within a directory means the information is quizzable - the project cli can be run to perform the exercises for practice.
 
+# CLI
 ## Prerequisites
 
 1. Install Dependencies / C linker
