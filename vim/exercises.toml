@@ -2,97 +2,120 @@
 
 [[exercises]]
 level = "beginner"
-task = "Move the cursor left, right, up, and down without using arrow keys."
+task = '''
+Vim movement practice
+
+- Move up, right, down, and left by character.
+- Move right and left by word, and move to word endings.
+- Move to the absolute start of a line, the first non-whitespace character, and the end of a line.
+- Jump to the first line, last line, and a specific line number in the file.
+- Find a character on the current line, jump before a character, and repeat or reverse that find motion.
+- Jump between matching brackets, parentheses, and braces.
+- Move the cursor to the top, middle, and bottom of the visible screen without scrolling.
+- Reposition the current line on screen and scroll by half-pages and full pages.
+'''
 hint = '''
-h (left)   l (right)   k (up)   j (down)
+h / j / k / l      — left / down / up / right
+w / b / e          — next word start / previous word start / next word end
+W / B / E          — word motions that only split on whitespace
+0 / ^ / $          — absolute line start / first non-whitespace / line end
+gg / G             — first line / last line
+42G                — jump to line 42  (also :42<Enter>)
+f{char} / F{char}  — jump forward / backward to char on current line
+t{char} / T{char}  — jump forward / backward just before / after char
+; / ,              — repeat the last f/F/t/T forward / backward
+%                  — jump to matching (), [], or {}
+H / M / L          — top / middle / bottom of visible screen
+zz / zt / zb       — center current line / move it to top / move it to bottom
+Ctrl-d / Ctrl-u    — scroll half page down / up
+Ctrl-f / Ctrl-b    — scroll full page down / up
 '''
 
 [[exercises]]
 level = "beginner"
-task = "Jump forward and backward by one word at a time."
-hint = '''
-w (next word start)   b (previous word start)   e (next word end)
-W / B / E do the same but treat only whitespace as a word delimiter.
-'''
+task = '''
+Insert-mode entry practice
 
-[[exercises]]
-level = "beginner"
-task = "Jump to the absolute start of the line, the first non-whitespace character, and the end of the line."
-hint = '''
-0   — column 0 (absolute start)
-^   — first non-whitespace character
-$   — end of line
+- Enter insert mode before the cursor.
+- Enter insert mode after the cursor.
+- Enter insert mode at the first non-whitespace character on the current line.
+- Enter insert mode at the end of the current line.
+- Open a new blank line below the current line and enter insert mode.
+- Open a new blank line above the current line and enter insert mode.
 '''
-
-[[exercises]]
-level = "beginner"
-task = "Jump to the very first line and the very last line of the file."
-hint = '''
-gg  — first line
-G   — last line
-'''
-
-[[exercises]]
-level = "beginner"
-task = "Jump to a specific line number, say line 42."
-hint = '''
-:42<Enter>   or   42G
-'''
-
-[[exercises]]
-level = "beginner"
-task = "Enter insert mode before the cursor, after the cursor, at the start of the line, and at the end of the line."
 hint = '''
 i  — insert before cursor
 a  — insert after cursor (append)
 I  — insert at first non-whitespace on line
 A  — insert at end of line
+o  — open new line below, enter insert mode
+O  — open new line above, enter insert mode
 '''
 
 [[exercises]]
 level = "beginner"
-task = "Open a new blank line below the current line and enter insert mode. Then do the same above."
+task = '''
+Delete, change, and replace practice
+
+- Delete the character under the cursor.
+- Delete the current line.
+- Delete from the cursor to the end of the line.
+- Delete by word, including both inner-word and around-word variants.
+- Delete up to a target character and through a target character on the current line.
+- Change from the cursor to the end of the line.
+- Change a word from the cursor position or change the whole inner word.
+- Change up to a target character on the current line.
+- Replace a single character without staying in insert mode.
+- Undo, redo, and repeat the last normal-mode change.
+'''
 hint = '''
-o  — new line below, enter insert mode
-O  — new line above, enter insert mode
+x          — delete character under cursor
+dd         — delete current line
+D / d$     — delete from cursor to end of line
+dw         — delete to start of next word
+daw / diw  — delete word with / without surrounding whitespace
+dt{char}   — delete up to, but not including, the next {char}
+df{char}   — delete through, including, the next {char}
+C / c$     — change from cursor to end of line
+cw / ciw   — change to end of word / change whole inner word
+ct{char}   — change up to, but not including, the next {char}
+r{char}    — replace character under cursor and return to normal mode
+u / Ctrl-r — undo / redo
+.          — repeat the last normal-mode change
 '''
 
 [[exercises]]
 level = "beginner"
-task = "Delete the character under the cursor. Then delete the entire current line."
+task = '''
+Copy, paste, and visual selection practice
+
+- Yank the current line.
+- Paste copied or deleted text below or after the cursor.
+- Paste copied or deleted text above or before the cursor.
+- Enter character-wise visual mode.
+- Enter line-wise visual mode.
+- Enter block visual mode.
+- Yank, delete, or change text from a visual selection.
+'''
 hint = '''
-x   — delete character under cursor
-dd  — delete entire line
+yy      — yank current line
+p / P   — paste below or after cursor / paste above or before cursor
+v       — character-wise visual mode
+V       — line-wise visual mode
+Ctrl-v  — block visual mode
+In visual mode: y yanks, d deletes, c changes the selection.
 '''
 
 [[exercises]]
 level = "beginner"
-task = "Delete from the cursor to the end of the line."
-hint = '''
-D   — delete to end of line
-d$  — equivalent explicit form
-'''
+task = '''
+File command practice
 
-[[exercises]]
-level = "beginner"
-task = "Delete the word the cursor is on."
-hint = '''
-dw   — delete to start of next word
-daw  — delete word including surrounding whitespace
-diw  — delete word, leave surrounding whitespace
+- Save the current file.
+- Quit the current file.
+- Quit without saving changes.
+- Save and quit in one command.
 '''
-
-[[exercises]]
-level = "beginner"
-task = "Undo your last change, then redo it."
-hint = '''
-u        — undo
-Ctrl-r   — redo
-'''
-
-[[exercises]]
-level = "beginner"
-task = "Save the current file. Quit. Quit without saving. Save and quit in one command."
 hint = '''
 :w    — save (write)
 :q    — quit
@@ -100,216 +123,91 @@ hint = '''
 :wq   — save and quit  (also :x)
 '''
 
-[[exercises]]
-level = "beginner"
-task = "Yank (copy) the current line and paste it below the cursor. Then paste it above."
-hint = '''
-yy  — yank current line
-p   — paste below / after cursor
-P   — paste above / before cursor
-'''
-
-[[exercises]]
-level = "beginner"
-task = "Enter character-wise visual mode, line-wise visual mode, and block visual mode."
-hint = '''
-v        — character-wise visual
-V        — line-wise visual
-Ctrl-v   — block (column) visual
-'''
-
-[[exercises]]
-level = "beginner"
-task = "Find the next occurrence of a character on the current line, then jump backward to it."
-hint = '''
-f{char}  — jump forward to char on line
-F{char}  — jump backward to char on line
-t{char}  — jump to just before char (forward)
-T{char}  — jump to just after char (backward)
-;        — repeat the last f/F/t/T forward
-,        — repeat the last f/F/t/T backward
-'''
-
-[[exercises]]
-level = "beginner"
-task = "Replace the single character under the cursor without entering insert mode."
-hint = '''
-r{char}  — replaces the char under cursor and returns to normal mode immediately
-'''
-
-[[exercises]]
-level = "beginner"
-task = "Change (delete and enter insert mode) from the cursor to the end of the line."
-hint = '''
-C    — change to end of line (same as c$)
-c$   — explicit form
-'''
-
-[[exercises]]
-level = "beginner"
-task = "Change the word the cursor is sitting on."
-hint = '''
-cw   — change from cursor to end of word
-ciw  — change inner word (whole word regardless of cursor position)
-'''
-
-[[exercises]]
-level = "beginner"
-task = "Repeat the last normal-mode change you made."
-hint = '''
-.  — dot operator: replays the last change (delete, insert, substitution, etc.)
-'''
-
-[[exercises]]
-level = "beginner"
-task = "Jump to the bracket, paren, or brace that matches the one under the cursor."
-hint = '''
-%  — bounces between matching pairs: () [] {}
-   Also works on /* */ comments and #if / #endif in C.
-'''
-
-[[exercises]]
-level = "beginner"
-task = "Scroll the screen so the current line is centered, at the top, and at the bottom — without moving the cursor."
-hint = '''
-zz  — center current line on screen
-zt  — current line to top of screen
-zb  — current line to bottom of screen
-'''
-
-[[exercises]]
-level = "beginner"
-task = "Scroll down and up by half a page, then a full page."
-hint = '''
-Ctrl-d  — scroll half page down
-Ctrl-u  — scroll half page up
-Ctrl-f  — scroll full page forward (down)
-Ctrl-b  — scroll full page backward (up)
-'''
-
-[[exercises]]
-level = "beginner"
-task = "Move the cursor to the top, middle, and bottom of the visible screen without scrolling."
-hint = '''
-H  — High: cursor to top of visible screen
-M  — Middle: cursor to middle of visible screen
-L  — Low: cursor to bottom of visible screen
-'''
-
-[[exercises]]
-level = "beginner"
-task = "Delete from the cursor up to (but not including) a specific character later on the line."
-hint = '''
-dt{char}  — delete up to (not including) the next {char} on the line
-ct{char}  — same, but enter insert mode after deleting
-df{char}  — delete through (including) the next {char}
-'''
-
 # ── Intermediate ──────────────────────────────────────────────────────────────
 
 [[exercises]]
 level = "intermediate"
-task = "Change the text inside a pair of double quotes, single quotes, parentheses, brackets, and braces — without deleting the delimiters."
+task = '''
+Text object and register practice
+
+- Change text inside double quotes, single quotes, parentheses, brackets, and braces without deleting the delimiters.
+- Change text around those same delimiters, including the delimiters themselves.
+- Yank text inside parentheses into a named register.
+- Switch to another buffer and paste from that named register.
+- Inspect register contents after yanking.
+'''
 hint = '''
-ci"  — change inside double quotes
-ci'  — change inside single quotes
-ci(  — change inside parentheses  (also ci) )
-ci[  — change inside brackets     (also ci] )
-ci{  — change inside braces       (also ci} )
-Works from anywhere inside the pair — no need to be on the delimiter.
+ci" / ci'  — change inside double / single quotes
+ci( / ci[ / ci{  — change inside parentheses / brackets / braces
+ca" / ca'  — change around double / single quotes, including delimiters
+ca( / ca[ / ca{  — change around parentheses / brackets / braces
+"ayi(      — yank inner parentheses into register 'a'
+:bn        — switch to next buffer  (or Ctrl-^ for alternate file)
+"ap        — paste from register 'a'
+:registers — inspect all register contents
 '''
 
 [[exercises]]
 level = "intermediate"
-task = "Change the text inside a pair of delimiters AND delete the delimiters themselves."
-hint = '''
-ca"  — change around double quotes (deletes the quotes too)
-ca'  — change around single quotes
-ca(  — change around parentheses
-ca[  — change around brackets
-ca{  — change around braces
-The 'a' mnemonic = "a [delimiter]" (includes delimiters); 'i' = "inside".
-'''
+task = '''
+Search and substitution practice
 
-[[exercises]]
-level = "intermediate"
-task = "Yank text inside parentheses into a named register, switch to another buffer, and paste it there."
-hint = '''
-"ayi(   — yank inner parens into register 'a'
-:bn     — switch to next buffer  (or Ctrl-^ for the alternate file)
-"ap     — paste from register 'a'
-:registers  — inspect all register contents
+- Search forward and backward for a typed pattern.
+- Move through search matches in both directions.
+- Search for the exact word under the cursor.
+- Replace a word on the current line.
+- Replace every occurrence of a word in the whole file.
+- Repeat the whole-file replacement with confirmation on each match.
+- Replace a word only inside a visual selection.
 '''
-
-[[exercises]]
-level = "intermediate"
-task = "Search forward in the file for a pattern, then navigate through all matches."
 hint = '''
 /pattern<Enter>   — forward search
 ?pattern<Enter>   — backward search
-n  — jump to next match (same direction)
-N  — jump to previous match (opposite direction)
+n / N             — next match / previous match
+* / #             — search forward / backward for word under cursor
+g* / g#           — search word under cursor without word boundaries
+:s/old/new/g      — replace on current line only
+:%s/old/new/g     — replace all occurrences in file
+:%s/old/new/gc    — confirm each replacement
+V then :          — Vim fills in :'<,'> for the visual range
+:'<,'>s/old/new/g — replace only inside the visual selection
 '''
 
 [[exercises]]
 level = "intermediate"
-task = "Search for the exact word the cursor is currently sitting on."
+task = '''
+Marks and navigation history practice
+
+- Set a local mark on the current line.
+- Move far away, then jump back to the exact cursor position of that mark.
+- Jump back to only the line of that mark.
+- Navigate backward and forward through the jump list.
+- Navigate backward and forward through the change list.
+- Inspect the mark, jump, and change lists.
+'''
 hint = '''
-*  — search forward for word under cursor (whole-word match)
-#  — search backward for word under cursor
-Both respect word boundaries; use g* / g# to ignore them.
+m{a-z}    — set a local mark, e.g. ma
+`{a-z}    — jump to exact position of mark
+'{a-z}    — jump to line of mark
+:marks    — list marks
+Ctrl-o    — jump to older position in jump list
+Ctrl-i    — jump to newer position in jump list
+:jumps    — display jump list
+g; / g,   — older / newer position in change list
+:changes  — display change list
 '''
 
 [[exercises]]
 level = "intermediate"
-task = "Replace every occurrence of a word in the entire file. Then repeat with a confirmation prompt on each replacement."
-hint = '''
-:%s/old/new/g   — replace all occurrences (no confirmation)
-:%s/old/new/gc  — 'c' flag: confirm each replacement (y/n/a/q)
-:s/old/new/g    — replace on current line only
-'''
+task = '''
+Macro recording and editing practice
 
-[[exercises]]
-level = "intermediate"
-task = "Replace a word only within a visual selection."
-hint = '''
-1. Select lines with V
-2. Type :  — vim fills in :'<,'>
-3. Complete: :'<,'>s/old/new/g
-The '<,'> range is set automatically from the visual selection.
+- Record a macro that appends a semicolon to the end of a line.
+- Replay that macro once, replay the last-used macro, and replay it with a count.
+- Paste a recorded macro into the buffer as text.
+- Edit the macro text in place.
+- Yank the edited macro text back into the same register.
 '''
-
-[[exercises]]
-level = "intermediate"
-task = "Set a mark on the current line, move far away, then jump back to the exact cursor position of that mark."
-hint = '''
-m{a-z}   — set a local mark (e.g. ma)
-`{a-z}   — jump to exact position (line + column) of mark
-'{a-z}   — jump to the line of the mark (first non-whitespace)
-:marks   — list all marks
-'''
-
-[[exercises]]
-level = "intermediate"
-task = "Navigate backward through your jump history, then forward again."
-hint = '''
-Ctrl-o  — jump to older position in the jump list
-Ctrl-i  — jump to newer position in the jump list
-:jumps  — display the full jump list
-'''
-
-[[exercises]]
-level = "intermediate"
-task = "Navigate to a position where you recently made an edit, without using the jump list."
-hint = '''
-g;  — go to older position in the change list
-g,  — go to newer position in the change list
-:changes  — display the full change list
-'''
-
-[[exercises]]
-level = "intermediate"
-task = "Record a macro that appends a semicolon to the end of a line, then replay it on several lines."
 hint = '''
 qa          — start recording into register 'a'
 A;<Esc>     — append semicolon, leave insert mode
@@ -317,138 +215,90 @@ q           — stop recording
 @a          — replay macro 'a'
 @@          — replay the last-used macro
 5@a         — replay 5 times
+"ap         — paste macro contents as text
+"ayy        — yank edited line back into register 'a'
+:let @a='<Ctrl-r a>'  — edit macro string inline
 '''
 
 [[exercises]]
 level = "intermediate"
-task = "Edit a macro you already recorded, without re-recording it from scratch."
+task = '''
+Windows, buffers, tabs, and file browsing practice
+
+- Split the current window horizontally and vertically.
+- Open a specific file in a horizontal or vertical split.
+- Move focus between splits, equalize split sizes, and close a split.
+- List open buffers, switch by number, move to next and previous buffers, and close a buffer.
+- Toggle between the current and alternate buffer.
+- Browse files with netrw and open files from the browser.
+- Open a new tab, move between tabs, jump to a numbered tab, and close a tab.
+- Yank text in one split, switch to another split, and paste it there.
+'''
 hint = '''
-"ap            — paste the macro contents as text into the buffer
-  (edit the text in-place)
-"ayy           — yank the edited line back into register 'a'
-Alternative: :let @a='<Ctrl-r a>' then edit the string inline.
+:sp / :split          — horizontal split
+:vs / :vsplit         — vertical split
+:sp filename          — open file in horizontal split
+:vs filename          — open file in vertical split
+Ctrl-w h/j/k/l        — move focus left/down/up/right
+Ctrl-w w / = / q      — cycle splits / equalize / close current split
+:ls / :buffers        — list buffers (# = alternate, % = current)
+:b{N}                 — switch to buffer N
+:bn / :bp             — next / previous buffer
+:bd / :bd{N}          — close current buffer / close buffer N
+Ctrl-^ or Ctrl-6      — toggle current and alternate buffer
+:Ex / :Explore        — open netrw in current window
+:Sex / :Vex           — netrw in horizontal / vertical split
+<Enter> / -           — open file or directory / go up one directory
+v / o                  — open netrw file in vertical / horizontal split
+:tabnew filename      — open file in new tab
+gt / gT / {N}gt       — next tab / previous tab / go to tab N
+:tabc                 — close current tab
+yy, V then y, p       — yank normally and paste across splits or tabs
+"ay / "ap             — use register 'a' for explicit copy and paste
 '''
 
 [[exercises]]
 level = "intermediate"
-task = "Split the current window horizontally, then vertically. Navigate between the splits."
+task = '''
+Formatting and line transformation practice
+
+- Indent and dedent the current line.
+- Indent or dedent a visual selection.
+- Auto-indent a line, a block, a visual selection, and the entire file.
+- Toggle the case of one character.
+- Uppercase and lowercase a motion, a word, a line, and a visual selection.
+- Join the current line with the line below, with and without inserting a space.
+'''
 hint = '''
-:sp   or  :split          — horizontal split
-:vs   or  :vsplit         — vertical split
-Ctrl-w h/j/k/l            — move focus left/down/up/right
-Ctrl-w w                  — cycle through splits
-Ctrl-w =                  — equalize split sizes
-Ctrl-w q  or  :q          — close current split
+>> / <<       — indent / dedent current line
+> / <         — indent / dedent visual selection
+5>>           — indent 5 lines from cursor downward
+==            — auto-indent current line
+=G            — auto-indent from cursor to end of file
+=ip           — auto-indent inner paragraph
+gg=G          — auto-indent entire file
+~             — toggle case of character under cursor
+gU{motion}    — uppercase motion, e.g. gUiw
+gu{motion}    — lowercase motion
+gUU / guu     — uppercase / lowercase entire line
+U / u / ~     — uppercase / lowercase / toggle visual selection
+J / gJ        — join next line with / without a space
+3J            — join the next 3 lines
 '''
 
 [[exercises]]
 level = "intermediate"
-task = "Open a specific file in a new vertical split directly from the command line."
-hint = '''
-:vs filename   — open file in vertical split
-:sp filename   — open file in horizontal split
-From netrw: press v on a file to open in vertical split, o for horizontal.
-'''
+task = '''
+Counted command practice
 
-[[exercises]]
-level = "intermediate"
-task = "List all open buffers, switch to a specific one by number, and close one."
-hint = '''
-:ls  or  :buffers   — list all buffers (# = alternate, % = current, a = active)
-:b{N}               — switch to buffer N
-:bn / :bp           — next / previous buffer
-:bd                 — delete (close) current buffer
-:bd{N}              — close buffer N
+- Move several words or lines with one counted motion.
+- Delete several words or lines with one counted operator.
+- Indent multiple lines with one counted operator.
+- Apply counts to motions and operators until the pattern feels automatic.
 '''
-
-[[exercises]]
-level = "intermediate"
-task = "Switch instantly back to the file you were just editing."
 hint = '''
-Ctrl-^  (also Ctrl-6)  — toggle between current and alternate (last-used) buffer
-The alternate buffer is marked with '#' in :ls output.
-'''
-
-[[exercises]]
-level = "intermediate"
-task = "Open netrw to browse the filesystem, navigate into a directory, and open a file."
-hint = '''
-:Ex  or  :Explore   — open netrw in current window
-:Sex                — horizontal split
-:Vex                — vertical split
-<Enter>             — open file or enter directory
--                   — go up one directory level
-'''
-
-[[exercises]]
-level = "intermediate"
-task = "Indent a line one level, dedent it, then indent a visual selection of multiple lines."
-hint = '''
->>   — indent current line one level
-<<   — dedent current line one level
-In visual mode: >  or  <  (use . to repeat)
-5>>  — indent 5 lines from cursor downward
-'''
-
-[[exercises]]
-level = "intermediate"
-task = "Auto-indent an entire block or function to fix its indentation."
-hint = '''
-==     — auto-indent current line
-=G     — auto-indent from cursor to end of file
-=ip    — auto-indent inner paragraph
-In visual mode: =  — auto-indent the selection
-gg=G   — auto-indent the entire file
-'''
-
-[[exercises]]
-level = "intermediate"
-task = "Toggle the case of a character. Uppercase and lowercase a motion or word."
-hint = '''
-~       — toggle case of character under cursor (then advance)
-gU{motion}  — uppercase  (e.g. gUiw = uppercase word)
-gu{motion}  — lowercase
-gUU / guu   — upper/lowercase entire line
-In visual mode: U (uppercase), u (lowercase), ~ (toggle)
-'''
-
-[[exercises]]
-level = "intermediate"
-task = "Join the current line with the line below it."
-hint = '''
-J   — join next line, replacing the newline with a single space
-gJ  — join next line with no space added
-3J  — join the next 3 lines
-'''
-
-[[exercises]]
-level = "intermediate"
-task = "Open a new tab, switch between tabs, and close a tab."
-hint = '''
-:tabnew            — open a new empty tab
-:tabnew filename   — open file in new tab
-gt                 — next tab
-gT                 — previous tab
-{N}gt              — go to tab number N
-:tabc              — close current tab
-'''
-
-[[exercises]]
-level = "intermediate"
-task = "Yank a block of text in one split, switch to a different split, and paste it there."
-hint = '''
-Yank normally: yy, V then y, etc.
-Ctrl-w w      — move focus to the other split
-p             — paste (the unnamed register is shared across all splits and tabs)
-"ay / "ap     — use a named register for explicit control
-'''
-
-[[exercises]]
-level = "intermediate"
-task = "Use a count with a motion or operator to move or edit efficiently."
-hint = '''
-{count}{motion}   — e.g. 5w (5 words forward), 3j (3 lines down), 4b (4 words back)
-{count}{operator} — e.g. 3dd (delete 3 lines), 2dw (delete 2 words), 5>> (indent 5 lines)
+{count}{motion}    — e.g. 5w, 3j, 4b
+{count}{operator}  — e.g. 3dd, 2dw, 5>>
 Counts work with almost every operator and motion.
 '''
 
@@ -456,212 +306,195 @@ Counts work with almost every operator and motion.
 
 [[exercises]]
 level = "advanced"
-task = "Run an ex command on every line in the file that matches a pattern."
+task = '''
+Batch Ex command practice
+
+- Run an Ex command on every line that matches a pattern.
+- Run an Ex command on every line that does not match a pattern.
+- Run a normal-mode command on an explicit line range.
+- Run a normal-mode command on every line in the file.
+- Run a normal-mode command on a visual selection.
+- Apply a recorded macro to every line in a visual selection.
+'''
 hint = '''
-:g/pattern/command
-:g/TODO/d            — delete all lines containing TODO
-:g/^$/d              — delete all blank lines
-:g/pattern/norm dd   — run a normal-mode command on each matching line
-:g/pattern/p         — print all matching lines (like grep)
-:v/pattern/d         — delete all lines NOT matching (inverted :g)
+:g/pattern/command      — run command on matching lines
+:g/TODO/d               — delete all lines containing TODO
+:g/^$/d                 — delete all blank lines
+:g/pattern/norm dd      — run normal command on each matching line
+:g/pattern/p            — print matching lines
+:v/pattern/d            — delete all lines NOT matching
+:5,15norm I//           — prepend // to lines 5-15
+:%norm A;               — append ; to every line in file
+:'<,'>norm {cmd}        — run normal command on visual selection
+:'<,'>norm @a           — apply macro 'a' to every selected line
 '''
 
 [[exercises]]
 level = "advanced"
-task = "Run a normal-mode command on an explicit range of lines — e.g. comment out lines 5 to 15."
+task = '''
+Block visual editing practice
+
+- Select a rectangular block across multiple lines.
+- Delete a rectangular column of text.
+- Insert the same text at the beginning of several selected lines.
+- Append the same text after a block across several selected lines.
+'''
 hint = '''
-:5,15norm I//       — prepend // to lines 5-15
-:%norm A;           — append ; to every line in the file
-:'<,'>norm {cmd}    — run on visual selection (range filled by vim after V + :)
-:norm can run any sequence of normal-mode keystrokes.
+Ctrl-v       — enter block visual mode
+j/k          — extend selection up/down
+h/l          — extend selection left/right
+d or x       — delete selected block
+I            — insert before the block
+A            — append after the block
+Esc          — apply inserted text to every selected line
 '''
 
 [[exercises]]
 level = "advanced"
-task = "Delete a rectangular column of text across multiple lines using block visual mode."
+task = '''
+Shell command and file insertion practice
+
+- Filter the entire file through a shell command.
+- Filter only a visual selection through a shell command.
+- Insert the output of a shell command below the current cursor line.
+- Insert command output at the top of the file.
+- Insert the entire contents of another file below the cursor or at the top of the buffer.
+'''
 hint = '''
-Ctrl-v          — enter block visual mode
-j/k             — extend selection up/down
-h/l             — extend selection left/right
-d  or  x        — delete the selected block
+:%!sort                 — pipe whole file through sort
+:'<,'>!sort             — pipe visual selection through sort
+:%!python3 -m json.tool — pretty-print JSON
+:%!column -t            — align columns with whitespace
+:r !command             — insert command stdout below cursor
+:r !date                — insert current date
+:0r !command            — insert command output at top of file
+:r filename             — insert file contents below current line
+:0r filename            — insert file contents at top of buffer
 '''
 
 [[exercises]]
 level = "advanced"
-task = "Insert the same text at the beginning of multiple lines simultaneously."
+task = '''
+Project-wide and multi-buffer edit practice
+
+- Build an argument list of files to edit.
+- Run a substitution across every file in the argument list and save changed files.
+- List or reload the current argument list.
+- Run a substitution across every open buffer and save changed buffers.
+- Suppress pattern-not-found errors so batch edits do not abort early.
+'''
 hint = '''
-Ctrl-v          — block visual
-j/k             — select lines
-I               — insert before the block (A to append after)
-(type text)
-Esc             — the text appears on all selected lines
+:args *.py                     — load all .py files into arg list
+:args                          — list current arg list
+:argdo %s/old/new/ge | update  — replace in all arg files and save changes
+:argdo e                       — reload all arg files from disk
+:bufdo %s/old/new/ge | update  — replace in all open buffers and save changes
+ge                             — suppress pattern-not-found errors
+update                         — save only buffers that changed
 '''
 
 [[exercises]]
 level = "advanced"
-task = "Filter the entire file through a shell command (e.g. sort all lines). Then do the same for only a visual selection."
+task = '''
+Quickfix, location list, and project search practice
+
+- Search recursively for a pattern across project files and populate the quickfix list.
+- Open the quickfix list, navigate through entries, jump to a specific entry, and close it.
+- Open the per-window location list, navigate through entries, and close it.
+- Compare when quickfix is global and when location list is per-window.
+'''
 hint = '''
-:%!sort             — pipe whole file through sort, replace with output
-:'<,'>!sort         — pipe selection through sort
-:%!python3 -m json.tool   — pretty-print JSON
-:%!column -t        — align columns with whitespace
+:vimgrep /pattern/gj **/*.py  — search all .py files without jumping first
+:grep pattern **/*            — external grep, faster on large projects
+:copen / :cclose              — open / close quickfix window
+:cn / :cp                     — next / previous quickfix entry
+:cc{N}                        — jump to quickfix entry N
+:cfirst / :clast              — first / last quickfix entry
+:lopen / :lclose              — open / close location list
+:ln / :lp                     — next / previous location entry
+Quickfix is global; location lists are per-window.
+:make, :grep, :vimgrep, LSP, and plugins can populate these lists.
 '''
 
 [[exercises]]
 level = "advanced"
-task = "Insert the output of a shell command into the buffer at the current cursor position."
+task = '''
+Code navigation and cross-file mark practice
+
+- Generate and use a ctags index to jump to a definition.
+- Jump back up the tag stack after visiting a definition.
+- Jump to a named tag and move through multiple tag matches.
+- Jump to the local or global declaration of the word under the cursor without a tags file.
+- Set a global mark in one file, open another file, and jump back to the exact marked position.
+'''
 hint = '''
-:r !command    — insert stdout of command below cursor
-:r !date       — insert current date
-:r !ls         — insert directory listing
-:0r !command   — insert at top of file
+ctags -R .    — generate tags in project root
+Ctrl-]        — jump to tag definition under cursor
+Ctrl-t        — jump back up the tag stack
+:tag {name}   — jump to named tag
+:tn / :tp     — next / previous tag match
+:tags         — show tag stack
+gd / gD       — go to local / global declaration under cursor
+No tags file is needed for gd or gD; Vim searches the current buffer.
+mA            — set global mark A
+`A / 'A       — jump to exact position / line of global mark A
+:marks        — list marks, including globals
 '''
 
 [[exercises]]
 level = "advanced"
-task = "Run a search-and-replace across every file in the argument list at once."
+task = '''
+Prose reformatting and spellcheck practice
+
+- Set a target text width.
+- Reformat the current paragraph, a motion, the current line, and a visual selection.
+- Enable and disable spell checking.
+- Jump between misspelled words.
+- Get correction suggestions, add a word to the dictionary, and mark a word as misspelled.
+'''
 hint = '''
-:args *.py                        — load all .py files into the arg list
-:argdo %s/old/new/ge | update     — replace in all; 'e' suppresses not-found errors; update saves if changed
-:args                             — list current arg list
-:argdo e                          — reload all arg files from disk
+:set textwidth=80  — set wrapping width
+gqap               — reformat current paragraph
+gq{motion}         — reformat a motion
+gqq                — reformat current line
+gq                 — reformat visual selection
+:set spell         — enable spell check
+:set nospell       — disable spell check
+]s / [s            — next / previous misspelling
+z=                 — correction suggestions for word under cursor
+zg / zw            — add word to dictionary / mark word as misspelled
 '''
 
 [[exercises]]
 level = "advanced"
-task = "Open the quickfix list, navigate through its entries, and close it."
+task = '''
+Fold practice
+
+- Create a manual fold over a range of lines.
+- Open, close, and toggle the fold under the cursor.
+- Open all folds in the file.
+- Close all folds in the file.
+- Switch to indentation-based folding.
+'''
 hint = '''
-:copen       — open quickfix window
-:cclose      — close quickfix window
-:cn / :cp    — next / previous entry
-:cc{N}       — jump to entry N
-:cfirst / :clast
-Quickfix is populated by :make, :grep, :vimgrep, and LSP diagnostics.
+zf{motion}             — create manual fold, e.g. zf5j
+zo / zc / za           — open / close / toggle fold under cursor
+zR / zM                — open all folds / close all folds
+:set foldmethod=indent — auto-fold by indentation level
 '''
 
 [[exercises]]
 level = "advanced"
-task = "Search recursively for a pattern across all files in the project using vimgrep, then navigate the results."
-hint = '''
-:vimgrep /pattern/gj **/*.py   — search all .py files (j = don't jump to first match)
-:copen                          — see all matches in quickfix
-:cn / :cp                       — jump through matches
-:grep pattern **/*              — uses external grep (faster on large projects)
-'''
+task = '''
+Neovim terminal practice
 
-[[exercises]]
-level = "advanced"
-task = "Jump to the definition of a function using a ctags index, then jump back."
-hint = '''
-(generate tags with: ctags -R . in project root)
-Ctrl-]      — jump to tag definition under cursor
-Ctrl-t      — jump back up the tag stack
-:tag {name} — jump to named tag
-:tn / :tp   — next / previous tag match when multiple exist
-:tags       — show tag stack
+- Open a terminal buffer inside Neovim.
+- Run a command in terminal-insert mode.
+- Leave terminal mode and return to normal mode.
+- Treat the terminal buffer like a regular buffer once back in normal mode.
 '''
-
-[[exercises]]
-level = "advanced"
-task = "Jump to the local or global declaration of the word under the cursor without a tags file."
 hint = '''
-gd  — go to local declaration of word under cursor (searches from top of function)
-gD  — go to global declaration (searches from top of file)
-No external tools required — vim searches the current buffer.
-'''
-
-[[exercises]]
-level = "advanced"
-task = "Set a global mark inside one file, then open a completely different file and jump back to that mark."
-hint = '''
-mA            — set global mark A (uppercase letters = global / cross-file)
-`A            — jump to the exact position of mark A from any file
-'A            — jump to the line of mark A
-:marks        — list all marks including globals
-'''
-
-[[exercises]]
-level = "advanced"
-task = "Reformat a paragraph of prose to wrap at a specific line width."
-hint = '''
-:set textwidth=80
-gqap    — reformat current paragraph (a = around, p = paragraph)
-gq{motion}   — reformat any motion
-gqq          — reformat current line
-gq in visual mode reflows the selection.
-'''
-
-[[exercises]]
-level = "advanced"
-task = "Enable spell checking, jump to misspelled words, and get correction suggestions."
-hint = '''
-:set spell           — enable spell check
-:set nospell         — disable
-]s    — next misspelling
-[s    — previous misspelling
-z=    — show correction suggestions for word under cursor
-zg    — add word to personal dictionary
-zw    — mark word as misspelled
-'''
-
-[[exercises]]
-level = "advanced"
-task = "Open a terminal inside neovim, run a command, and switch back to normal mode."
-hint = '''
-:terminal  or  :term    — open terminal buffer
-i or a                  — enter terminal-insert mode (to type shell commands)
-Ctrl-\ Ctrl-n           — exit terminal mode, return to normal mode
-(treat the terminal buffer like any other buffer once in normal mode)
-'''
-
-[[exercises]]
-level = "advanced"
-task = "Create a fold over a range of lines, then open, close, and toggle it. Close and open all folds in the file."
-hint = '''
-zf{motion}   — create manual fold (e.g. zf5j folds 5 lines)
-zo           — open fold under cursor
-zc           — close fold under cursor
-za           — toggle fold under cursor
-zR           — open ALL folds in file
-zM           — close ALL folds in file
-:set foldmethod=indent  — auto-fold by indentation level
-'''
-
-[[exercises]]
-level = "advanced"
-task = "Insert the entire contents of another file into the current buffer at the cursor."
-hint = '''
-:r filename     — insert file contents below current line
-:0r filename    — insert at the very top of the buffer
-:r !command     — insert command output instead
-'''
-
-[[exercises]]
-level = "advanced"
-task = "Run a substitution across all currently open buffers and save each one."
-hint = '''
-:bufdo %s/old/new/ge | update
-  bufdo   — run the command in every buffer
-  ge      — suppress 'pattern not found' errors so bufdo doesn't abort
-  update  — save only buffers that were actually modified
-'''
-
-[[exercises]]
-level = "advanced"
-task = "Apply a recorded macro to every line in a visual selection."
-hint = '''
-1. Record a macro: qa ... q
-2. Select lines: V + j/k
-3. Run:  :norm @a
-   (vim expands this to  :'<,'>norm @a — runs macro on each selected line)
-'''
-
-[[exercises]]
-level = "advanced"
-task = "Open the location list, navigate its entries, and close it."
-hint = '''
-:lopen       — open location list (per-window, unlike the global quickfix)
-:lclose      — close
-:ln / :lp    — next / previous entry
-LSP and some plugins write diagnostics to the location list per window.
+:terminal or :term  — open terminal buffer
+i or a              — enter terminal-insert mode
+Ctrl-\ Ctrl-n       — leave terminal mode and return to normal mode
 '''

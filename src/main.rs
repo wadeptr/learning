@@ -114,8 +114,12 @@ fn run_quiz(mut exercises: Vec<Exercise>) {
         println!();
         println!("  {}{}{}/{}{}", CYAN, BOLD, i + 1, total, RESET);
         println!();
-        for line in word_wrap(&ex.task, 58) {
-            println!("  {}{}{}", BOLD, line, RESET);
+        for line in word_wrap_preserving_lines(&ex.task, 58) {
+            if line.is_empty() {
+                println!();
+            } else {
+                println!("  {}{}{}", BOLD, line, RESET);
+            }
         }
         println!();
 
@@ -145,7 +149,7 @@ fn run_quiz(mut exercises: Vec<Exercise>) {
     println!();
 }
 
-/// Word-wraps `s` at `width` characters.
+/// Word-wraps one logical line at `width` characters.
 fn word_wrap(s: &str, width: usize) -> Vec<String> {
     let mut lines = Vec::new();
     let mut current = String::new();
@@ -162,6 +166,28 @@ fn word_wrap(s: &str, width: usize) -> Vec<String> {
     }
     if !current.is_empty() {
         lines.push(current);
+    }
+    lines
+}
+
+/// Word-wraps text while preserving explicit line breaks from the exercise file.
+fn word_wrap_preserving_lines(s: &str, width: usize) -> Vec<String> {
+    let mut lines = Vec::new();
+    for source_line in s.trim().lines() {
+        let source_line = source_line.trim();
+        if source_line.is_empty() {
+            lines.push(String::new());
+        } else if let Some(item) = source_line.strip_prefix("- ") {
+            for (i, line) in word_wrap(item, width.saturating_sub(2)).iter().enumerate() {
+                if i == 0 {
+                    lines.push(format!("- {}", line));
+                } else {
+                    lines.push(format!("  {}", line));
+                }
+            }
+        } else {
+            lines.extend(word_wrap(source_line, width));
+        }
     }
     lines
 }
