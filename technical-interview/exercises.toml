@@ -80,6 +80,70 @@ Load factor goal: keep between 0.3 and 0.7 for O(1) average operations.
 
 [[exercises]]
 level = "data-structures"
+task = '''Implement an LRU Cache from scratch. Include:
+  - class LRUCache(capacity)
+  - get(key) -> value or -1
+  - put(key, value) -> None
+  - O(1) average time for both get and put'''
+hint = '''
+Use two structures together:
+  1. Hash map: key -> node
+  2. Doubly linked list: most recently used near the front, least recently used near the back
+
+Node fields:
+  key, value, prev, next
+
+LRUCache fields:
+  capacity
+  cache = {}       # key -> node
+  head, tail       # dummy/sentinel nodes to avoid edge-case-heavy insert/remove logic
+
+Recommended helper methods:
+  _remove(node):
+    unlink node from its current list position
+
+  _add_to_front(node):
+    insert node right after head
+
+  _move_to_front(node):
+    _remove(node), then _add_to_front(node)
+
+  _evict_lru():
+    remove tail.prev from the list and delete its key from cache
+
+get(key):
+  if key not in cache: return -1
+  node = cache[key]
+  _move_to_front(node)
+  return node.value
+
+put(key, value):
+  if key exists:
+    update node.value
+    _move_to_front(node)
+    return
+
+  create new node
+  cache[key] = node
+  _add_to_front(node)
+
+  if len(cache) > capacity:
+    _evict_lru()
+
+Edge cases: capacity 0, updating an existing key, repeatedly reading the same key,
+evicting exactly one key after inserting past capacity.
+
+Example:
+  cache = LRUCache(2)
+  cache.put(1, "A")
+  cache.put(2, "B")
+  cache.get(1)      # returns "A"; key 1 becomes most recently used
+  cache.put(3, "C") # evicts key 2
+  cache.get(2)      # returns -1
+'''
+
+[[exercises]]
+level = "data-structures"
 task = "Implement a Graph using an Adjacency List. Write BFS and DFS traversal methods."
 hint = '''
 Representation: dict mapping each node -> list of neighbors
