@@ -175,4 +175,14 @@ class DoubleLLNode:
         self.next = None
         self.prev = None
 
+'''
+Utils
+'''
 
+def print_linked_list(head):
+    list = str(head.val)
+    while head:
+        head = head.next
+        if head:
+            list = list + ' -> ' + str(head.val)
+    print(list)
