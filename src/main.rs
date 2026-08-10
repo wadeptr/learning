@@ -4,7 +4,7 @@ use std::path::{Path, PathBuf};
 
 use chrono::Local;
 use rand::seq::SliceRandom;
-use serde::Deserialize;
+use serde::{Deserialize, Serialize};
 
 // ── Terminal styling ──────────────────────────────────────────────────────────
 
@@ -28,6 +28,14 @@ struct Exercise {
 struct KnowledgeBase {
     exercises: Vec<Exercise>,
 }
+
+#[derive(Debug, Default, Deserialize, Serialize)]
+struct SampleState {
+    reviewed_tasks: Vec<String>,
+}
+
+const DEFAULT_SAMPLE_SIZE: usize = 5;
+const SAMPLE_STATE_FILE: &str = ".quiz-sample-state.toml";
 
 // ── Filesystem ────────────────────────────────────────────────────────────────
 
@@ -66,6 +74,77 @@ fn prompt(msg: &str) -> String {
 
 fn ask_yn(label: &str) -> bool {
     prompt(&format!("  Include {}? [y/n] ", label)) == "y"
+}
+
+fn sample_state_path(kb_path: &Path) -> PathBuf {
+    kb_path
+        .parent()
+        .expect("exercises.toml must have a parent directory")
+        .join(SAMPLE_STATE_FILE)
+}
+
+fn load_sample_state(path: &Path) -> SampleState {
+    let Ok(content) = fs::read_to_string(path) else {
+        return SampleState::default();
+    };
+    toml::from_str(&content).unwrap_or_else(|e| {
+        eprintln!(
+            "Warning: cannot parse sample history at {}: {}. Starting a new cycle.",
+            path.display(),
+            e
+        );
+        SampleState::default()
+    })
+}
+
+fn save_sample_state(path: &Path, state: &SampleState) -> io::Result<()> {
+    let content =
+        toml::to_string_pretty(state).map_err(|e| io::Error::new(io::ErrorKind::InvalidData, e))?;
+    fs::write(path, content)
+}
+
+fn select_sample(exercises: &[Exercise], count: usize, state: &mut SampleState) -> Vec<Exercise> {
+    state
+        .reviewed_tasks
+        .retain(|task| exercises.iter().any(|exercise| &exercise.task == task));
+
+    let mut unseen: Vec<&Exercise> = exercises
+        .iter()
+        .filter(|exercise| !state.reviewed_tasks.contains(&exercise.task))
+        .collect();
+
+    if unseen.is_empty() {
+        state.reviewed_tasks.clear();
+        unseen = exercises.iter().collect();
+    }
+
+    let mut rng = rand::thread_rng();
+    unseen.shuffle(&mut rng);
+
+    let mut sample = Vec::new();
+    if count > 1 {
+        let mut unseen_levels: Vec<String> = Vec::new();
+        for exercise in &unseen {
+            if !unseen_levels.contains(&exercise.level) {
+                unseen_levels.push(exercise.level.clone());
+            }
+        }
+        unseen_levels.shuffle(&mut rng);
+
+        for level in unseen_levels.into_iter().take(count) {
+            if let Some(index) = unseen.iter().position(|exercise| exercise.level == level) {
+                sample.push(unseen.swap_remove(index).clone());
+            }
+        }
+    }
+
+    let remaining = count.saturating_sub(sample.len());
+    sample.extend(unseen.into_iter().take(remaining).cloned());
+    sample.shuffle(&mut rng);
+    state
+        .reviewed_tasks
+        .extend(sample.iter().map(|exercise| exercise.task.clone()));
+    sample
 }
 
 // ── Topic selection ───────────────────────────────────────────────────────────
@@ -110,7 +189,10 @@ fn run_quiz(mut exercises: Vec<Exercise>) {
 
     for (i, ex) in exercises.iter().enumerate() {
         println!();
-        println!("{}  ────────────────────────────────────────────────────{}", DIM, RESET);
+        println!(
+            "{}  ────────────────────────────────────────────────────{}",
+            DIM, RESET
+        );
         println!();
         println!("  {}{}{}/{}{}", CYAN, BOLD, i + 1, total, RESET);
         println!();
@@ -143,7 +225,10 @@ fn run_quiz(mut exercises: Vec<Exercise>) {
     }
 
     println!();
-    println!("{}  ────────────────────────────────────────────────────{}", DIM, RESET);
+    println!(
+        "{}  ────────────────────────────────────────────────────{}",
+        DIM, RESET
+    );
     println!();
     println!("  {}{}All done! Great work.{}", BOLD, GREEN, RESET);
     println!();
@@ -205,7 +290,11 @@ fn main() {
             Some(t) => t,
             None => {
                 let available: Vec<&str> = topics.iter().map(|(t, _)| t.as_str()).collect();
-                eprintln!("Topic '{}' not found. Available: {}", name, available.join(", "));
+                eprintln!(
+                    "Topic '{}' not found. Available: {}",
+                    name,
+                    available.join(", ")
+                );
                 return;
             }
         },
@@ -216,18 +305,79 @@ fn main() {
     };
 
     let (topic_name, kb_path) = topic;
+
+    let sample_size = match args.get(2).map(String::as_str) {
+        Some("--sample") => match args.get(3) {
+            Some(raw) => match raw.parse::<usize>() {
+                Ok(0) | Err(_) => {
+                    eprintln!("Sample size must be a positive integer.");
+                    return;
+                }
+                Ok(size) => Some(size),
+            },
+            None => Some(DEFAULT_SAMPLE_SIZE),
+        },
+        Some(arg) => {
+            eprintln!(
+                "Unknown option '{}'. Usage: quiz [topic] [--sample [count]]",
+                arg
+            );
+            return;
+        }
+        None => None,
+    };
+
+    if args.len() > 4 {
+        eprintln!("Too many arguments. Usage: quiz [topic] [--sample [count]]");
+        return;
+    }
+
     let date = Local::now().format("%b %d %Y").to_string();
 
     println!();
-    println!("{}{}  ══════════════════════════════════════════════════{}", BOLD, CYAN, RESET);
-    println!("{}{}  Quiz: {}  —  {}{}", BOLD, CYAN, topic_name, date, RESET);
-    println!("{}{}  ══════════════════════════════════════════════════{}", BOLD, CYAN, RESET);
+    println!(
+        "{}{}  ══════════════════════════════════════════════════{}",
+        BOLD, CYAN, RESET
+    );
+    println!(
+        "{}{}  Quiz: {}  —  {}{}",
+        BOLD, CYAN, topic_name, date, RESET
+    );
+    println!(
+        "{}{}  ══════════════════════════════════════════════════{}",
+        BOLD, CYAN, RESET
+    );
     println!();
 
     let content = fs::read_to_string(kb_path)
         .unwrap_or_else(|e| panic!("Cannot read {}: {}", kb_path.display(), e));
     let kb: KnowledgeBase = toml::from_str(&content)
         .unwrap_or_else(|e| panic!("Cannot parse {}: {}", kb_path.display(), e));
+
+    if let Some(size) = sample_size {
+        let state_path = sample_state_path(kb_path);
+        let mut state = load_sample_state(&state_path);
+        let sample = select_sample(&kb.exercises, size, &mut state);
+
+        if let Err(e) = save_sample_state(&state_path, &state) {
+            eprintln!(
+                "Cannot save sample history at {}: {}",
+                state_path.display(),
+                e
+            );
+            return;
+        }
+
+        println!(
+            "  Random review: {} unseen exercise{} selected ({} of {} reviewed this cycle).",
+            sample.len(),
+            if sample.len() == 1 { "" } else { "s" },
+            state.reviewed_tasks.len(),
+            kb.exercises.len()
+        );
+        run_quiz(sample);
+        return;
+    }
 
     // Collect levels in order of first appearance — TOML file controls the ordering.
     let mut levels: Vec<String> = Vec::new();
@@ -251,4 +401,68 @@ fn main() {
     }
 
     run_quiz(pool);
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use std::collections::HashSet;
+
+    fn exercise(level: &str, task: &str) -> Exercise {
+        Exercise {
+            level: level.to_string(),
+            task: task.to_string(),
+            hint: String::new(),
+        }
+    }
+
+    fn exercises() -> Vec<Exercise> {
+        vec![
+            exercise("data-structures", "linked list"),
+            exercise("data-structures", "hash table"),
+            exercise("algorithms", "binary search"),
+            exercise("algorithms", "breadth-first search"),
+        ]
+    }
+
+    #[test]
+    fn samples_do_not_repeat_until_the_cycle_is_complete() {
+        let exercises = exercises();
+        let mut state = SampleState::default();
+
+        let first = select_sample(&exercises, 2, &mut state);
+        let second = select_sample(&exercises, 2, &mut state);
+        let first_tasks: HashSet<&str> = first.iter().map(|ex| ex.task.as_str()).collect();
+        let second_tasks: HashSet<&str> = second.iter().map(|ex| ex.task.as_str()).collect();
+
+        assert!(first_tasks.is_disjoint(&second_tasks));
+        assert_eq!(state.reviewed_tasks.len(), exercises.len());
+
+        let third = select_sample(&exercises, 2, &mut state);
+        assert_eq!(third.len(), 2);
+        assert_eq!(state.reviewed_tasks.len(), 2);
+    }
+
+    #[test]
+    fn sample_includes_each_level_when_space_allows() {
+        let exercises = exercises();
+        let mut state = SampleState::default();
+
+        let sample = select_sample(&exercises, 2, &mut state);
+        let levels: HashSet<&str> = sample.iter().map(|ex| ex.level.as_str()).collect();
+
+        assert_eq!(levels, HashSet::from(["data-structures", "algorithms"]));
+    }
+
+    #[test]
+    fn final_sample_uses_only_the_unseen_remainder() {
+        let exercises = exercises();
+        let mut state = SampleState::default();
+
+        let _ = select_sample(&exercises, 3, &mut state);
+        let final_sample = select_sample(&exercises, 3, &mut state);
+
+        assert_eq!(final_sample.len(), 1);
+        assert_eq!(state.reviewed_tasks.len(), exercises.len());
+    }
 }

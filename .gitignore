@@ -1,3 +1,4 @@
 /target
-/technical-interview/misc
+.quiz-sample-state.toml
+/technical-interview/misc*
 */__pycache__/*

@@ -42,5 +42,13 @@ The cli scans the working directory for subdirectories that contain `exercises.t
 ```rust
 cargo run           # interactive topic picker
 cargo run -- vim    # skip to vim exercises
+cargo run -- technical-interview --sample      # random daily sample of 5
+cargo run -- technical-interview --sample 8    # choose a sample size
 ```
 
+Sample mode draws from every exercise in the selected topic, regardless of
+level. When possible, a sample of at least two includes both data structures
+and algorithms. It stores a small `.quiz-sample-state.toml` history file in the
+topic directory so questions do not repeat until the complete topic has been
+reviewed. If fewer unseen questions remain than the requested sample size, the
+final sample in that cycle is smaller; the next invocation starts a new cycle.
